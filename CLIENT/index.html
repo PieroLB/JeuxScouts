@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @font-face {
+            font-family: 'Sarabun';
+            src: url('./font/Sarabun/Sarabun-Regular.ttf');
+        }
+    </style>
+    <script defer src="script.js"></script>
+    <title>Jeux Scouts</title>
+</head>
+<body style="margin: 0px; padding: 0px; font-family: Sarabun; background-color: #00395C;">
+    <div id="div-head" style="text-align: center; background-color: white; padding: 20px; color: #00395C;">
+        <img src="./assets/logo.png" height="50" style="position: absolute; left: 10px;">
+        <label style="font-size: xxx-large;"><strong onclick="window.open('/', '_self')">Jeux Scouts</strong></label>
+        <button style="position: absolute; right: 10px; height: 50px; width: 100px;" onclick="document.getElementById('div-infos').style.display = 'none'; document.getElementById('div-connexion').style.display = ''; document.getElementById('div-editorMenus').style.display = 'none'; document.getElementById('div-menu').style.display = 'none'; document.getElementById('div-editorMenu').style.display = 'none';">Se connecter</button>
+        <br>
+        <i style="font-size: small;">Développé par Pierre LE BEUZ</i>
+        <br>
+        <br>
+        <fieldset id="fieldset-menuJeux" style="display: inline-block;">
+            <legend>Jeu</legend>
+            <button onclick="jeuAfficherJeux()">Liste des jeux</button>
+            <button onclick="jeuEditorJeux();">Editeur de jeux</button>
+        </fieldset>
+        <fieldset id="fieldset-menuMenu" style="display: inline-block;">
+            <legend>Menu</legend>
+            <button onclick="document.getElementById('div-infos').style.display = 'none'; document.getElementById('div-menus').style.display = ''; document.getElementById('div-editorMenus').style.display = 'none'; document.getElementById('div-menu').style.display = 'none'; document.getElementById('div-editorMenu').style.display = 'none';">Liste des menus</button>
+            <button onclick="jeuEditorMenus();">Editeur de menus</button>
+        </fieldset>
+    </div>
+    <div id="div-infos" style="color: white; text-align: center;">
+        <br>
+        Ce site permet d'avoir une liste de jeux et de menus pour les Scouts.
+        <br>
+        Vous pouvez vous connecter pour pouvoir ajouter des jeux et des menus vous-même.
+    </div>
+
+
+    <div id="div-jeux" style="background-color: #00395C; text-align: center;">
+        <br>
+    </div>
+    <div id="div-jeu" style="text-align: center; color: white;"></div>
+    <div id="div-editorJeux" style="display: none; text-align: center;">
+    </div>
+    <div id="div-editorJeu" style="text-align: center; background-color: #00395C; color: white; display: none;">
+        <br>
+        Titre du jeux :
+        <input type="text" id="input-jeuTitre">
+        <br>
+        <select id="select-jeuFiltres">
+            <option>Farfadets</option>
+            <option>Louveteaux/Jeannettes</option>
+            <option>Scouts/Guides</option>
+            <option>Pionniers/Caravalles</option>
+            <option>Compagnons</option>
+            <option>moins de 5 minutes</option>
+            <option>entre 5 minutes et 15 minutes</option>
+            <option>plus de 15 minutes</option>
+        </select>
+        <button onclick="jeuAjouterFiltre(document.getElementById('select-jeuFiltres').options[document.getElementById('select-jeuFiltres').selectedIndex].value)">Ajouter le filtre</button>
+        <br>
+        <div id="div-jeuFiltres"></div>
+        <br>
+        <fieldset style="display: inline-block;">
+            <legend style="color: white;">Police</legend>
+            <select id="select-fontFamily" style="height: 30px;" onchange="if (activeMain == true) {text.document.execCommand('fontName', false, this.option[this.selectedIndex].value)}">
+                <option value="Arial">Arial</option>
+                <option value="Cambia">Cambia</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Cursive">Cursive</option>
+                <option value="fantasy">Fantasy</option>
+                <option value="Franklin Gothic Medium">Franklin Gothic Medium</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Gill Sans">Gill Sans</option>
+                <option value="Impact">Impact</option>
+                <option value="Lucida Sans">Lucida Sans</option>
+                <option value="monospace">Monospace</option>
+                <option value="Segoe UI">Segoe UI</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Trebuchet MS">Trebuchet MS</option>
+                <option value="Verdana">Verdana</option>
+            </select>
+            <input id="input-fontSize" style="height: 24px; width: 3em;" type="number" value="11" min="1" onchange="if (activeMain == true) {text.document.execCommand('fontSize', false, this.value+'px')}">
+            <input id="input-fontColor" type="color" style="height: 30px;" onchange="if (activeMain == true) {text.document.execCommand('foreColor', false, this.value)}">
+            <br>
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('bold')}"><strong>G</strong></button>
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('italic')}"><i>I</i></button>
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('underline')}"><u>S</u></button>    
+        </fieldset>
+        <fieldset style="display: inline-block;">
+            <legend style="color: white;">Paragraphe</legend>
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('JustifyLeft')}"><img src="assets/justify-left.png" height="20"></button>   
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('JustifyCenter')}"><img src="assets/justify-center.png" height="20"></button>   
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('JustifyRight')}"><img src="assets/justify-right.png" height="20"></button>   
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('justifyFull')}"><img src="assets/justify-full.png" height="20"></button>
+            <br>  
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('insertOrderedList')}"><img src="assets/liste-ordered.png" height="20"></button>   
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('insertUnorderedList')}"><img src="assets/liste-unordered.png" height="20"></button>   
+        </fieldset>
+        <fieldset style="display: inline-block;">
+            <legend style="color: white;">Autre</legend>
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="imageAppear()"><img src="assets/image.png" height="20"></button>   
+        </fieldset>
+        <fieldset style="display: none;">
+            <legend>Edition</legend>
+        </fieldset>
+        <br>
+        <br>
+        <iframe name="jeuText" style="border: solid white 1px; height: 600px; width: 800px; background-color: white;"></iframe>    
+        <div id="div-image" style="display: none; position: absolute; top: 37%; left: 34%; padding: 15px; font-size: xx-large; background-color: gray; border: solid black 1px; border-radius: 10px;">
+            <strong>Choisissez votre image</strong>
+            <br>
+            <br>
+            <table>
+                <tr>
+                    <td>Choisir un fichier</td>
+                    <td style="padding-left: 30px; padding-right: 30px;"><strong>OU</strong></td>
+                    <td>Saisir un lien</td>
+                </tr>
+                <tr>
+                    <td style="padding-top: 15px;"><input id="input-file" style="font-size: x-large; padding: 8px;" type="file" hidden onchange="document.getElementById('td-nameFile').textContent = this.files[0].name"><label for="input-file" style="padding: 10px; background-color: white; border: solid 1px white; border-radius: 10px;">FICHIER</label></td>
+                    <td></td>
+                    <td style="padding-top: 15px;"><input id="input-link" type="url" style="font-size: x-large;"></td>
+                </tr>
+                <tr>
+                    <td id="td-nameFile"></td>
+                </tr>
+            </table>
+            <br>
+            <button style="font-size: x-large; padding: 8px;" onclick="imageDisappear()">Retour</button>
+            <button style="font-size: x-large; padding: 8px;" onclick="imageGenerate()">Valider</button>
+        </div>
+        <br>
+        <br>
+        <button onclick="jeuBrouillon(document.getElementById('input-jeuTitre').value, jeuText.document.documentElement.innerHTML)">Enregistrer comme brouillon</button>
+        <button onclick="jeuPublier(document.getElementById('input-jeuTitre').value, jeuText.document.documentElement.innerHTML)">Publier</button>
+        <br>
+    </div>
+
+
+
+    <div id="div-menus" style="background-color: #00395C; text-align: center;">
+        <br>
+    </div>
+    <div id="div-menu" style="text-align: center; color: white;"></div>
+    <div id="div-editorMenus" style="display: none; text-align: center;">
+    </div>
+    <div id="div-editorMenu" style="text-align: center; background-color: #00395C; color: white; display: none;">
+        <br>
+        Titre du menu :
+        <input type="text" id="input-menuTitre">
+        <br>
+        <select id="select-menuFiltres">
+            <option>Farfadets</option>
+            <option>Louveteaux/Jeannettes</option>
+            <option>Scouts/Guides</option>
+            <option>Pionniers/Caravalles</option>
+            <option>Compagnons</option>
+            <option>moins de 5 minutes</option>
+            <option>entre 5 minutes et 15 minutes</option>
+            <option>plus de 15 minutes</option>
+        </select>
+        <button onclick="menuAjouterFiltre(document.getElementById('select-menuFiltres').options[document.getElementById('select-menuFiltres').selectedIndex].value)">Ajouter le filtre</button>
+        <br>
+        <div id="div-menuFiltres"></div>
+        <br>
+        <fieldset style="display: inline-block;">
+            <legend style="color: white;">Police</legend>
+            <select id="select-fontFamily" style="height: 30px;" onchange="if (activeMain == true) {text.document.execCommand('fontName', false, this.option[this.selectedIndex].value)}">
+                <option value="Arial">Arial</option>
+                <option value="Cambia">Cambia</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Cursive">Cursive</option>
+                <option value="fantasy">Fantasy</option>
+                <option value="Franklin Gothic Medium">Franklin Gothic Medium</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Gill Sans">Gill Sans</option>
+                <option value="Impact">Impact</option>
+                <option value="Lucida Sans">Lucida Sans</option>
+                <option value="monospace">Monospace</option>
+                <option value="Segoe UI">Segoe UI</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Trebuchet MS">Trebuchet MS</option>
+                <option value="Verdana">Verdana</option>
+            </select>
+            <input id="input-fontSize" style="height: 24px; width: 3em;" type="number" value="11" min="1" onchange="if (activeMain == true) {text.document.execCommand('fontSize', false, this.value+'px')}">
+            <input id="input-fontColor" type="color" style="height: 30px;" onchange="if (activeMain == true) {text.document.execCommand('foreColor', false, this.value)}">
+            <br>
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('bold')}"><strong>G</strong></button>
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('italic')}"><i>I</i></button>
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('underline')}"><u>S</u></button>    
+        </fieldset>
+        <fieldset style="display: inline-block;">
+            <legend style="color: white;">Paragraphe</legend>
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('JustifyLeft')}"><img src="assets/justify-left.png" height="20"></button>   
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('JustifyCenter')}"><img src="assets/justify-center.png" height="20"></button>   
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('JustifyRight')}"><img src="assets/justify-right.png" height="20"></button>   
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('justifyFull')}"><img src="assets/justify-full.png" height="20"></button>
+            <br>  
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('insertOrderedList')}"><img src="assets/liste-ordered.png" height="20"></button>   
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="if (activeMain == true) {text.document.execCommand('insertUnorderedList')}"><img src="assets/liste-unordered.png" height="20"></button>   
+        </fieldset>
+        <fieldset style="display: inline-block;">
+            <legend style="color: white;">Autre</legend>
+            <button style="margin-top: 5px; height: 30px; width: 30px; background-color: white; border: 0px;" onmouseover="this.style.backgroundColor = 'gray'" onmouseout="this.style.backgroundColor = 'white'" onclick="imageAppear()"><img src="assets/image.png" height="20"></button>   
+        </fieldset>
+        <fieldset style="display: none;">
+            <legend>Edition</legend>
+        </fieldset>
+        <br>
+        <br>
+        <iframe name="menuText" style="border: solid white 1px; height: 600px; width: 800px; background-color: white;"></iframe>    
+        <div id="div-image" style="display: none; position: absolute; top: 37%; left: 34%; padding: 15px; font-size: xx-large; background-color: gray; border: solid black 1px; border-radius: 10px;">
+            <strong>Choisissez votre image</strong>
+            <br>
+            <br>
+            <table>
+                <tr>
+                    <td>Choisir un fichier</td>
+                    <td style="padding-left: 30px; padding-right: 30px;"><strong>OU</strong></td>
+                    <td>Saisir un lien</td>
+                </tr>
+                <tr>
+                    <td style="padding-top: 15px;"><input id="input-file" style="font-size: x-large; padding: 8px;" type="file" hidden onchange="document.getElementById('td-nameFile').textContent = this.files[0].name"><label for="input-file" style="padding: 10px; background-color: white; border: solid 1px white; border-radius: 10px;">FICHIER</label></td>
+                    <td></td>
+                    <td style="padding-top: 15px;"><input id="input-link" type="url" style="font-size: x-large;"></td>
+                </tr>
+                <tr>
+                    <td id="td-nameFile"></td>
+                </tr>
+            </table>
+            <br>
+            <button style="font-size: x-large; padding: 8px;" onclick="imageDisappear()">Retour</button>
+            <button style="font-size: x-large; padding: 8px;" onclick="imageGenerate()">Valider</button>
+        </div>
+        <br>
+        <br>
+        <button onclick="menuBrouillon(document.getElementById('input-menuTitre').value, menuText.document.documentElement.innerHTML)">Enregistrer comme brouillon</button>
+        <button onclick="menuPublier(document.getElementById('input-menuTitre').value, menuText.document.documentElement.innerHTML)">Publier</button>
+        <br>
+    </div>
+
+    <div id="div-connexion" style="display: none; text-align: center; color: white;">
+        <fieldset style="display: inline-block;">
+            <legend>Se connecter</legend>
+            Identifiant 
+            <input id="input-identifiant" type="text">
+            <br>
+            Mot de passe 
+            <input id="input-password" type="password">
+            <br>
+            <button onclick="connexion(document.getElementById('input-identifiant').value, document.getElementById('input-password').value)">Se connecter</button>
+        </fieldset>
+        <h1>OU</h1>
+        <fieldset style="display: inline-block;">
+            <legend>S'inscrire</legend>
+            Adresse email 
+            <input type="text">
+            <br>
+            <button>Valider</button>
+        </fieldset>
+    </div>
+</body>
+</html>
